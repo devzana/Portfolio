@@ -35,7 +35,7 @@ const baseIconStyle = {
 	margin: '6px 12px',
 }
 
-const ListOfIconTechnologies: any = {
+const ListOfIconTechnologies = {
 	expo: <SiExpo key={1} style={baseIconStyle} />,
 	postgresql: <SiPostgresql key={2}  style={baseIconStyle}/>,
 	mysql: <SiMysql key={3} style={baseIconStyle} />,
