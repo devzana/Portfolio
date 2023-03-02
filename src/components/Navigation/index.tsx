@@ -1,3 +1,4 @@
+import React from 'react'
 import {
 	Button,
 	Text,
@@ -5,34 +6,37 @@ import {
 	IconButton,
 	useBreakpointValue,
 	useColorModeValue,
-	Modal,
-	ModalOverlay,
-	ModalContent,
-	ModalHeader,
-	ModalFooter,
-	ModalBody,
-	ModalCloseButton,
-	useDisclosure,
 	useColorMode,
-	Container,
+	useDisclosure,
+	Slide,
 } from '@chakra-ui/react'
-import { SunIcon, MoonIcon, AttachmentIcon } from '@chakra-ui/icons'
-import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { SunIcon, MoonIcon, AttachmentIcon } from '@chakra-ui/icons'
+import SideNav from './sideNav'
 
 function Navigation() {
-
-	const { isOpen, onOpen, onClose } = useDisclosure()
-
+	const router = useRouter()
 	const { toggleColorMode } = useColorMode()
+	const { isOpen, onToggle } = useDisclosure()
+
+	// TODO: Massive refactoring on the Navigation elements
+	const SideNavigation = () => (
+		<Slide
+			direction="right"
+			in={isOpen}
+			style={{ zIndex: 10 }}
+		>
+			<SideNav onToggle={onToggle}/>
+		</Slide>
+	)
 
 	const navLinkElements = useBreakpointValue([
 		(
 			<IconButton
 				key={1}
-				onClick={onOpen}
-				bgColor='transparent'
+				variant='unstyled'
 				icon={<Image
 					src={useColorModeValue('/hamburger-light.svg', '/hamburger-dark.svg')}
 					alt='a toggler for nav menu on mobile'
@@ -41,13 +45,13 @@ function Navigation() {
 				/>}
 				aria-label={'toggler for nav menu'}
 				colorScheme='gray'
+				onClick={onToggle}
 			/>
 		),
 		(
 			<IconButton
 				key={2}
-				onClick={onOpen}
-				bgColor='transparent'
+				variant='unstyled'
 				icon={<Image
 					src={useColorModeValue('/hamburger-light.svg', '/hamburger-dark.svg')}
 					alt='a toggler for nav menu on mobile'
@@ -56,13 +60,13 @@ function Navigation() {
 				/>}
 				aria-label={'toggler for nav menu'}
 				colorScheme='gray'
+				onClick={onToggle}
 			/>
 		),
 		(
 			<IconButton
-				key={1}
-				onClick={onOpen}
-				bgColor='transparent'
+				key={3}
+				variant='unstyled'
 				icon={<Image
 					src={useColorModeValue('/hamburger-light.svg', '/hamburger-dark.svg')}
 					alt='a toggler for nav menu on mobile'
@@ -71,13 +75,13 @@ function Navigation() {
 				/>}
 				aria-label={'toggler for nav menu'}
 				colorScheme='gray'
+				onClick={onToggle}
 			/>
 		),
 		(
 			<IconButton
-				key={2}
-				onClick={onOpen}
-				bgColor='transparent'
+				key={4}
+				variant='unstyled'
 				icon={<Image
 					src={useColorModeValue('/hamburger-light.svg', '/hamburger-dark.svg')}
 					alt='a toggler for nav menu on mobile'
@@ -86,16 +90,17 @@ function Navigation() {
 				/>}
 				aria-label={'toggler for nav menu'}
 				colorScheme='gray'
+				onClick={onToggle}
 			/>
 		),
 		(
 			<HStack gap={6} key={2}>
-				<HStack as={Link} href='#about'>
+				<HStack as={Link} href='#about' scroll={false}>
 					<Text
 						fontWeight='bold'
 						color={useColorModeValue('brand.base-main', '#F3E4ED')}
 						css={{
-							WebkitTextStroke: 0.5,
+							WebkitTextStroke: 0.3,
 							WebkitTextStrokeColor: '#393437',
 							filter: 'drop-shadow(0.1rem 0.1rem 0.01rem rgba(0, 0, 0, 0.25))'
 						}}
@@ -106,12 +111,12 @@ function Navigation() {
 								About
 					</Text>
 				</HStack>
-				<HStack as={Link} href='/'>
+				<HStack as={Link} href='#work'>
 					<Text
 						fontWeight='bold'
 						color={useColorModeValue('brand.base-main', '#F3E4ED')}
 						css={{
-							WebkitTextStroke: 0.5,
+							WebkitTextStroke: 0.3,
 							WebkitTextStrokeColor: '#393437',
 							filter: 'drop-shadow(0.1rem 0.1rem 0.01rem rgba(0, 0, 0, 0.25))'
 						}}
@@ -127,7 +132,7 @@ function Navigation() {
 						fontWeight='bold'
 						color={useColorModeValue('brand.base-main', '#F3E4ED')}
 						css={{
-							WebkitTextStroke: 0.5,
+							WebkitTextStroke: 0.3,
 							WebkitTextStrokeColor: '#393437',
 							filter: 'drop-shadow(0.1rem 0.1rem 0.01rem rgba(0, 0, 0, 0.25))'
 						}}
@@ -138,12 +143,12 @@ function Navigation() {
 								Projects
 					</Text>
 				</HStack>
-				<HStack as={Link} href='/'>
+				<HStack as={Link} href='#contact'>
 					<Text
 						fontWeight='bold'
 						color={useColorModeValue('brand.base-main', '#F3E4ED')}
 						css={{
-							WebkitTextStroke: 0.5,
+							WebkitTextStroke: 0.3,
 							WebkitTextStrokeColor: '#393437',
 							filter: 'drop-shadow(0.1rem 0.1rem 0.01rem rgba(0, 0, 0, 0.25))'
 						}}
@@ -174,119 +179,13 @@ function Navigation() {
 		)]
 	)
 
-	// TODO: Refactor modal convert into transition component
 	return (
 		<>
-			<Modal
-				isOpen={isOpen}
-				onClose={onClose}
-			>
-				<ModalOverlay/>
-				<ModalContent>
-					<ModalHeader
-						bgColor={useColorModeValue('brand.base-light', 'brand.base-dark')}
-						color={useColorModeValue('brand.base-dark', 'brand.base-light')}
-					>
-						Menu
-					</ModalHeader>
-					<ModalCloseButton />
-					<ModalBody
-						bgColor={useColorModeValue('brand.base-light', 'brand.base-dark')}
-						color={useColorModeValue('brand.base-dark', 'brand.base-light')}
-					>
-						<Container h='full'>
-							<HStack
-								as={Link}
-								href='#about'
-							>
-								<Text
-									fontWeight='bold'
-									color={useColorModeValue('brand.base-main', '#F3E4ED')}
-									css={{
-										WebkitTextStroke: 0.5,
-										WebkitTextStrokeColor: '#393437',
-										filter: 'drop-shadow(0.1rem 0.1rem 0.01rem rgba(0, 0, 0, 0.25))'
-									}}
-								>
-								00.
-								</Text>
-								<Text fontWeight='bold'>
-								About
-								</Text>
-							</HStack>
-							<HStack
-								as={Link}
-								href='/'
-							>
-								<Text
-									fontWeight='bold'
-									color={useColorModeValue('brand.base-main', '#F3E4ED')}
-									css={{
-										WebkitTextStroke: 0.5,
-										WebkitTextStrokeColor: '#393437',
-										filter: 'drop-shadow(0.1rem 0.1rem 0.01rem rgba(0, 0, 0, 0.25))'
-									}}
-								>
-								01.
-								</Text>
-								<Text fontWeight='bold'>
-								Work
-								</Text>
-							</HStack>
-							<HStack
-								as={Link}
-								href='/'
-							>
-								<Text
-									fontWeight='bold'
-									color={useColorModeValue('brand.base-main', '#F3E4ED')}
-									css={{
-										WebkitTextStroke: 0.5,
-										WebkitTextStrokeColor: '#393437',
-										filter: 'drop-shadow(0.1rem 0.1rem 0.01rem rgba(0, 0, 0, 0.25))'
-									}}
-								>
-								02.
-								</Text>
-								<Text fontWeight='bold'>
-								Projects
-								</Text>
-							</HStack>
-							<HStack
-								as={Link}
-								href='/'
-							>
-								<Text
-									fontWeight='bold'
-									color={useColorModeValue('brand.base-main', '#F3E4ED')}
-									css={{
-										WebkitTextStroke: 0.5,
-										WebkitTextStrokeColor: '#393437',
-										filter: 'drop-shadow(0.1rem 0.1rem 0.01rem rgba(0, 0, 0, 0.25))'
-									}}
-								>
-								03.
-								</Text>
-								<Text fontWeight='bold'>
-								Contact
-								</Text>
-							</HStack>
-						</Container>
-					</ModalBody>
-
-					<ModalFooter
-						bgColor={useColorModeValue('brand.base-light', 'brand.base-dark')}
-						color={useColorModeValue('brand.base-dark', 'brand.base-light')}
-					>
-						<IconButton
-							onClick={toggleColorMode}
-							icon={useColorModeValue(<MoonIcon />, <SunIcon />)}
-							aria-label={'toggle for color theme'}
-						/>
-					</ModalFooter>
-				</ModalContent>
-			</Modal>
+			<SideNavigation />
 			<HStack
+				w='full'
+				position='absolute'
+				zIndex={999}
 				py={4}
 				px={[6, 8, 12]}
 				bgColor={useColorModeValue('#FFFBFC', '#393437')}
@@ -298,6 +197,8 @@ function Navigation() {
 					alt='a cute face'
 					width={32}
 					height={32}
+					style={{ cursor: 'pointer' }}
+					onClick={() => router.push('#home')}
 				/>
 				{ navLinkElements }
 			</HStack>
