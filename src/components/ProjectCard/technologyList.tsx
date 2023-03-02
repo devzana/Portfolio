@@ -35,7 +35,8 @@ const baseIconStyle = {
 	margin: '6px 12px',
 }
 
-const ListOfIconTechnologies = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const ListOfIconTechnologies: any = {
 	expo: <SiExpo key={1} style={baseIconStyle} />,
 	postgresql: <SiPostgresql key={2}  style={baseIconStyle}/>,
 	mysql: <SiMysql key={3} style={baseIconStyle} />,
